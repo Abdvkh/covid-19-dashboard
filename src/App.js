@@ -21,7 +21,7 @@ function App() {
     const [country, setCountry] = useState('worldwide');
     const [countryInfo, setCountryInfo] = useState({});
     const [tableData, setTableData] = useState([]);
-    const [mapCenter, setMapCenter] = useState([34.80746, -40.4796]);
+    const [mapCenter, setMapCenter] = useState({lat: 34.80746, lng: -40.4796});
     const [mapZoom, setMapZoom] = useState(3);
     const [mapCountries, setMapCountries] = useState([]);
     const [casesType, setCasesType] = useState('cases');
@@ -67,8 +67,7 @@ function App() {
             .then(data => {
                 setCountry(countryCode);
                 setCountryInfo(data);
-
-                setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+                countryCode !== 'worldwide' && setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
                 setMapZoom(4);
             });
     };
@@ -98,19 +97,27 @@ function App() {
 
                 <div className="app__stats">
                   <InfoBox
+                      isRed
                       title="Coronavirus Cases"
+                      active={casesType==='cases'}
                       cases={prettyPrintStat(countryInfo.todayCases)}
                       total={prettyPrintStat(countryInfo.cases)}
+                      onClick={e => setCasesType('cases')}
                   />
                   <InfoBox
                       title="Recovered"
+                      active={casesType==='recovered'}
                       cases={prettyPrintStat(countryInfo.todayRecovered)}
                       total={prettyPrintStat(countryInfo.recovered)}
+                      onClick={e => setCasesType('recovered')}
                   />
                   <InfoBox
+                      isRed
                       title="Deaths"
+                      active={casesType==='deaths'}
                       cases={prettyPrintStat(countryInfo.todayDeaths)}
                       total={prettyPrintStat(countryInfo.deaths)}
+                      onClick={e => setCasesType('deaths')}
                   />
                 </div>
                 <Map
@@ -128,8 +135,9 @@ function App() {
                        <Table
                            countries={tableData}
                        />
-                       <h3>Wordlwide New Cases</h3>
+                       <h3>Wordlwide new {casesType}</h3>
                        <Linegraph
+                           className="app__graph"
                            casesType={casesType}
                        />
                    </CardContent>

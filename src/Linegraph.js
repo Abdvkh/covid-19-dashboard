@@ -66,7 +66,7 @@ const buildChartData = (data, casesType='cases') => {
     return chartData;
 };
 
-function Linegraph({casesType = "cases"}){
+function Linegraph({casesType = "cases"}, ...props){
     const [data, setData] = useState({});
 
     useEffect(() => {
@@ -74,7 +74,7 @@ function Linegraph({casesType = "cases"}){
             await fetch('https://disease.sh/v3/covid-19/historical/all?lastdays=120')
                 .then(response => response.json())
                 .then(data => {
-                    const chartData = buildChartData(data);
+                    const chartData = buildChartData(data, casesType);
                     setData(chartData);
                 });
         };
@@ -83,14 +83,14 @@ function Linegraph({casesType = "cases"}){
     }, [casesType]);
 
     return (
-        <div>
+        <div className={props.className}>
             {data?.length > 0 && (
                 <Line
                     data={
                         {
                             datasets: [
                                 {
-                                    backdropColor: "rgba(204, 16, 52, 0.5)",
+                                    backgroundColor: "rgba(204, 16, 52, 0.5)",
                                     borderColor: "#CC1034",
                                     data: data
                                 }

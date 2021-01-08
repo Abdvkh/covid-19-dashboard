@@ -1,3 +1,14 @@
+# Project Overview
+Deployed on firebase - https://covid-19-tracker-b1480.web.app/
+
+## Used:
+* JavaScript
+    * React
+    * Chart.js
+    * Leaflet.js
+    * Material UI
+    * Numeral
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

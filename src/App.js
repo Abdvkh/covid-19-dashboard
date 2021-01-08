@@ -22,6 +22,8 @@ function App() {
     const [tableData, setTableData] = useState([]);
     const [mapCenter, setMapCenter] = useState({lat: 34.80746, lng: -40.4796});
     const [mapZoom, setMapZoom] = useState(3);
+    const [mapCountries, setMapCountries] = useState([]);
+    const [casesType, setCasesType] = useState('cases');
 
     useEffect(() => {
         fetch('https://disease.sh/v3/covid-19/all')
@@ -43,6 +45,7 @@ function App() {
 
                     const sortedData = sortData(data);
                     setTableData(sortedData);
+                    setMapCountries(data);
                     setCountries(countries);
                 });
         };
@@ -52,6 +55,7 @@ function App() {
 
     const onCountryChange = async (event) => {
         const countryCode = event.target.value;
+
         const url =
           countryCode === 'worldwide'
             ? 'https://disease.sh/v3/covid-19/all'
@@ -62,6 +66,9 @@ function App() {
             .then(data => {
                 setCountry(countryCode);
                 setCountryInfo(data);
+
+                setMapCenter([data.countryInfo.lat, data.countryInfo.long]);
+                setMapZoom(4);
             });
     };
 
@@ -91,16 +98,24 @@ function App() {
                   <InfoBox title="Recovered" cases={countryInfo.todayRecovered} total={countryInfo.recovered}/>
                   <InfoBox title="Deaths" cases={countryInfo.todayDeaths} total={countryInfo.deaths}/>
                 </div>
-                <Map center={mapCenter} zoom={mapZoom}/>
+                <Map
+                    center={mapCenter}
+                    zoom={mapZoom}
+                    countries={mapCountries}
+                    casesType={casesType}
+                />
             </div>
+
+            <div>
                <Card className="app__right">
                    <CardContent>
                        <h3>Live Cases by Country</h3>
                        <Table countries={tableData}/>
                        <h3>Wordlwide New Cases</h3>
-                       <Linegraph casesType="cases"/>
+                       <Linegraph casesType={casesType}/>
                    </CardContent>
                </Card>
+            </div>
         </div>
     );
 }

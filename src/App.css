@@ -14,10 +14,7 @@ body {
 }
 
 .app__left {
-  flex: 90%;
-}
-
-.app__right {
+  flex: 0.9;
 }
 
 .app__header {

@@ -1,4 +1,5 @@
 import './App.css';
+import './InfoBox.css';
 import 'leaflet/dist/leaflet.css';
 import {
     MenuItem,
@@ -12,7 +13,7 @@ import {useEffect, useState} from "react";
 import InfoBox from "./InfoBox";
 import Map from "./Map";
 import Table from "./Table";
-import {sortData} from "./util";
+import {prettyPrintStat, sortData} from "./util";
 import Linegraph from "./Linegraph";
 
 function App() {
@@ -86,7 +87,9 @@ function App() {
                              <MenuItem value="worldwide">Worldwide</MenuItem>
                              {
                                  countries.map(country => (
-                                     <MenuItem value={country.value}>{country.name}</MenuItem>
+                                     <MenuItem
+                                         value={country.value}
+                                     >{country.name}</MenuItem>
                                  ))
                              }
                          </Select>
@@ -94,9 +97,21 @@ function App() {
                  </div>
 
                 <div className="app__stats">
-                  <InfoBox title="Coronavirus Cases" cases={countryInfo.todayCases} total={countryInfo.cases}/>
-                  <InfoBox title="Recovered" cases={countryInfo.todayRecovered} total={countryInfo.recovered}/>
-                  <InfoBox title="Deaths" cases={countryInfo.todayDeaths} total={countryInfo.deaths}/>
+                  <InfoBox
+                      title="Coronavirus Cases"
+                      cases={prettyPrintStat(countryInfo.todayCases)}
+                      total={prettyPrintStat(countryInfo.cases)}
+                  />
+                  <InfoBox
+                      title="Recovered"
+                      cases={prettyPrintStat(countryInfo.todayRecovered)}
+                      total={prettyPrintStat(countryInfo.recovered)}
+                  />
+                  <InfoBox
+                      title="Deaths"
+                      cases={prettyPrintStat(countryInfo.todayDeaths)}
+                      total={prettyPrintStat(countryInfo.deaths)}
+                  />
                 </div>
                 <Map
                     center={mapCenter}
@@ -110,9 +125,13 @@ function App() {
                <Card className="app__right">
                    <CardContent>
                        <h3>Live Cases by Country</h3>
-                       <Table countries={tableData}/>
+                       <Table
+                           countries={tableData}
+                       />
                        <h3>Wordlwide New Cases</h3>
-                       <Linegraph casesType={casesType}/>
+                       <Linegraph
+                           casesType={casesType}
+                       />
                    </CardContent>
                </Card>
             </div>
